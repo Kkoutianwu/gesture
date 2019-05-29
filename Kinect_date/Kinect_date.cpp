@@ -3,6 +3,7 @@
 #include <iostream> 
 #include <NuiApi.h>
 #include <opencv2/opencv.hpp>
+#include <time.h> 
 
 using namespace std;
 using namespace cv;
@@ -15,6 +16,8 @@ int main(int argc, char *argv[])
 	Mat skeletonImage;
 	int count = 0;
 	float dsetoff[3];
+	//DWORD t_start, t_end;
+	//t_start = GetTickCount();
 	skeletonImage.create(240, 320, CV_8UC3);
 	CvPoint skeletonPoint[NUI_SKELETON_COUNT][NUI_SKELETON_POSITION_COUNT] = { cvPoint(0,0) };
 	bool tracked[NUI_SKELETON_COUNT] = { FALSE };
@@ -102,29 +105,35 @@ int main(int argc, char *argv[])
 					if (count > 3)
 					{
 						count = 0;
+						//t_end = GetTickCount();
+						//std::cout << t_end - t_start << std::endl;
+						//t_start = t_end;
 						try
 						{
 							if (skeletonFrame.SkeletonData[i].SkeletonPositions[7].y > skeletonFrame.SkeletonData[i].SkeletonPositions[4].y)//左手开关
 							{
-								cout << "setoff1 : " << "(" << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z - dsetoff[2]) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x - dsetoff[0]) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y - dsetoff[1]) * 100 << ")" << endl;
+
+						/*		cout << "setoff1 : " << "(" << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z - dsetoff[2]) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x - dsetoff[0]) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y - dsetoff[1]) * 100 << ")" << endl;
 								ofstream OutFile("C:/Users/Kkoutianwu/Desktop/整合/gesture.txt");
 								OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z - dsetoff[2]) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x - dsetoff[0]) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y - dsetoff[1]) * 100;
-								OutFile.close();
-								//cout << "setoff1 : " << "(" << -skeletonFrame.SkeletonData[i].SkeletonPositions[11].z  * 100 << ", " << -skeletonFrame.SkeletonData[i].SkeletonPositions[11].x * 100 << ", " << skeletonFrame.SkeletonData[i].SkeletonPositions[11].y  * 100 << ")" << endl;
-								//if (abs(skeletonFrame.SkeletonData[i].SkeletonPositions[7].x * 100 - skeletonFrame.SkeletonData[i].SkeletonPositions[5].x * 100) > 15)
-								//{
-								//	ofstream OutFile("C:/Users/Kkoutianwu/Desktop/整合/gesture.txt");
-								//	OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y) * 100 << ", " << "1";
-								//	OutFile.close();
-								//	cout << "变成1啦 " << endl;
-								//}
-								//else
-								//{
-								//	ofstream OutFile("C:/Users/Kkoutianwu/Desktop/整合/gesture.txt");
-								//	OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y) * 100 << ", " << "0";
-								//	OutFile.close();
-								//	cout << "变成0啦 " << endl;
-								//}
+								OutFile.close();*/
+								cout << "setoff1 : " << "(" << -skeletonFrame.SkeletonData[i].SkeletonPositions[11].z  * 100 << ", " << -skeletonFrame.SkeletonData[i].SkeletonPositions[11].x * 100 << ", " << skeletonFrame.SkeletonData[i].SkeletonPositions[11].y  * 100 << ")" << endl;
+								if (abs(skeletonFrame.SkeletonData[i].SkeletonPositions[7].x * 100 - skeletonFrame.SkeletonData[i].SkeletonPositions[5].x * 100) > 20)
+								{
+									ofstream OutFile("C:/Users/Kkoutianwu/Desktop/整合/gesture.txt");
+									OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z - dsetoff[2]) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x - dsetoff[0]) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y - dsetoff[1]) * 100 << ", " << "1";
+									//OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y) * 100 << ", " << "1";
+									OutFile.close();
+									cout << "变成1啦 " << endl;
+								}
+								else
+								{
+									ofstream OutFile("C:/Users/Kkoutianwu/Desktop/整合/gesture.txt");
+									OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z - dsetoff[2]) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x - dsetoff[0]) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y - dsetoff[1]) * 100 << ", " << "0";
+									//OutFile << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].z) * 100 << ", " << -(skeletonFrame.SkeletonData[i].SkeletonPositions[11].x) * 100 << ", " << (skeletonFrame.SkeletonData[i].SkeletonPositions[11].y) * 100 << ", " << "0";
+									OutFile.close();
+									cout << "变成0啦 " << endl;
+								}
 								
 							}
 							else
